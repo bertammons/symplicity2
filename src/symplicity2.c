@@ -16,29 +16,33 @@ void line_layer_update_callback(Layer *layer, GContext* ctx) {
 
 void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   // Need to be static because they're used by the system later.
-  static char time_text[] = "00:00";  
   static char date_text[] = "Xxxxxxxxx 00";  
-  static char unix_time[] = "xxx";
-  sprintf(unix_time, "%u", (unsigned) time(NULL));
+  static char day_text[] = "Xxxxxxxxx";
+  static char time_text[] = "00:00";  
+  
+  //Unix Time
+  //sprintf(unix_time, "%u", (unsigned) time(NULL));
+  
   char *time_format;
 
-  // TODO: Only update the date when it's changed.
+  // Date Text
   strftime(date_text, sizeof(date_text), "%B %e", tick_time);
   text_layer_set_text(text_date_layer, date_text);
 
+  // Day Text
+  text_layer_set_text(text_day_layer, day_text);
+
+  // Time Text
   if (clock_is_24h_style()) {
     time_format = "%R";
   } else {
     time_format = "%I:%M";
   }
-
+  
   strftime(time_text, sizeof(time_text), time_format, tick_time);
 
-  
-  text_layer_set_text(text_day_layer, unix_time);
-
-  // Kludge to handle lack of non-padded hour format string
-  // for twelve hour clock.
+  // NOTE: Kludge to handle lack of non-padded hour format string
+  // for twelve hour clock. "Stupid Zer0"
   if (!clock_is_24h_style() && (time_text[0] == '0')) {
     memmove(time_text, &time_text[1], sizeof(time_text) - 1);
   }
