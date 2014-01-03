@@ -15,24 +15,19 @@
     "resources": {
         "media": [
             {
+                "type": "font",
+                "name": "FONT_COZUMIX_BIG_52",
+                "file": "fonts/Cozumix.ttf"
+            },
+            {
+                "type": "font",
+                "name": "FONT_LEANDER_SMALL_21",
+                "file": "fonts/Leander.ttf"
+            },
+            {
                 "type": "png",
                 "name": "IMAGE_BT_DISCONNECT_20",
                 "file": "images/phone.png"
-            },
-            {
-                "type": "font",
-                "name": "FONT_FADED_TYPEWRITER_SMALL_21",
-                "file": "fonts/Leander.ttf"
-            },
-            {
-                "type": "font",
-                "name": "FONT_FADED_TYPEWRITER_BIG_46",
-                "file": "fonts/Leander.ttf"
-            },
-            {
-                "type": "font",
-                "name": "RESOURCE_ID_FONT_ROBOTO_CONDENSED_21",
-                "file": "fonts/Roboto-Condensed.ttf"
             }
         ]
     }

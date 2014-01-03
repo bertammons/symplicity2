@@ -8,6 +8,10 @@ TextLayer *text_date_layer;
 TextLayer *text_day_layer;
 TextLayer *text_time_layer;
 TextLayer *text_unix_layer;
+TextLayer *text_time_left_layer;
+TextLayer *text_minutes_left_layer;
+TextLayer *text_hours_left_layer;
+TextLayer *text_days_left_layer;
 Layer *line_layer;
 
 /* static bool last_bt_state = false;
@@ -27,12 +31,41 @@ void handle_seccond_tick(struct tm *tick_time, TimeUnits units_changed) {
   static char unix_text[] = "Xxxxxxxxxx";
   static char date_text[] = "Xxxxxxxxx 00";  
   static char day_text[] = "Xxxxxxxxx";
-  static char time_text[] = "00:00";  
+  static char time_text[] = "00:00";
+
+  static char timel_text[] = "Xxxxxxxxxx";
+  static char minsl_text[] = "Xxxxxxxxxx";
+  static char hoursl_text[] = "Xxxxxxxxxx";
+  static char daysl_text[] = "Xxxxxxxxxx";
 
   //Unix Time
   time_t unix_time = time(NULL);
+
   snprintf(unix_text, sizeof(unix_text), "%d", (int)unix_time); //convert int to string
   text_layer_set_text(text_unix_layer, unix_text);
+
+  //Dead Time
+  int born_time = 491796000; //birth seccond in unix time
+  int dead_time = (born_time + 2680560000); // 85 years later
+
+  int time_left = (dead_time - unix_time); // remaining secconds in life
+  float minutes_left = (time_left / 60);
+  float hours_left = (minutes_left /60);
+  float days_left = (hours_left /24);
+
+  /*
+  snprintf(timel_text, sizeof(timel_text), "%d", (int)time_left);
+  text_layer_set_text(text_time_left_layer, timel_text);
+  */
+
+  snprintf(minsl_text, sizeof(minsl_text), "%d", (int)minutes_left);
+  text_layer_set_text(text_minutes_left_layer, minsl_text);
+
+  snprintf(hoursl_text, sizeof(hoursl_text), "%d", (int)hours_left);
+  text_layer_set_text(text_hours_left_layer, hoursl_text);
+
+  snprintf(daysl_text, sizeof(daysl_text), "%d", (int)days_left);
+  text_layer_set_text(text_days_left_layer, daysl_text);
 
   // Date Text
   strftime(date_text, sizeof(date_text), "%B %e", tick_time);
@@ -90,36 +123,71 @@ void handle_init(void) {
 
   Layer *window_layer = window_get_root_layer(window);
 
+  //Date Text Layer
+  text_date_layer = text_layer_create(GRect(8, 140, 144-8, 168-68));
+  text_layer_set_text_alignment(text_date_layer, GTextAlignmentLeft);
+  text_layer_set_text_color(text_date_layer, GColorWhite);
+  text_layer_set_background_color(text_date_layer, GColorClear);
+  text_layer_set_font(text_date_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
+  layer_add_child(window_layer, text_layer_get_layer(text_date_layer));
+
   // Unix text layer
-  text_unix_layer = text_layer_create(GRect(20, 2, 144-20, 168-2));
+  text_unix_layer = text_layer_create(GRect(0, 0, 144-0, 168-0));
   text_layer_set_text_alignment(text_unix_layer, GTextAlignmentLeft);
   text_layer_set_text_color(text_unix_layer, GColorWhite);
   text_layer_set_background_color(text_unix_layer, GColorClear);
-  text_layer_set_font(text_unix_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_SMALL_21)));
+  text_layer_set_font(text_unix_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
   layer_add_child(window_layer, text_layer_get_layer(text_unix_layer));
 
-  //Date Text Layer
-  text_date_layer = text_layer_create(GRect(8, 140, 144-8, 168-68));
-  text_layer_set_text_alignment(text_date_layer, GTextAlignmentCenter);
-  text_layer_set_text_color(text_date_layer, GColorWhite);
-  text_layer_set_background_color(text_date_layer, GColorClear);
-  text_layer_set_font(text_date_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_SMALL_21)));
-  layer_add_child(window_layer, text_layer_get_layer(text_date_layer));
+  // Time Left text layer
+  /*
+  text_time_left_layer = text_layer_create(GRect(0, 20, 144-0, 168-20));
+  text_layer_set_text_alignment(text_time_left_layer, GTextAlignmentLeft);
+  text_layer_set_text_color(text_time_left_layer, GColorWhite);
+  text_layer_set_background_color(text_time_left_layer, GColorClear);
+  text_layer_set_font(text_time_left_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
+  layer_add_child(window_layer, text_layer_get_layer(text_time_left_layer));
+  */
+
+  // minutes left text layer
+  text_minutes_left_layer = text_layer_create(GRect(0, 20, 144-0, 168-20));
+  text_layer_set_text_alignment(text_minutes_left_layer, GTextAlignmentLeft);
+  text_layer_set_text_color(text_minutes_left_layer, GColorWhite);
+  text_layer_set_background_color(text_minutes_left_layer, GColorClear);
+  text_layer_set_font(text_minutes_left_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
+  layer_add_child(window_layer, text_layer_get_layer(text_minutes_left_layer));
+
+  // hours left text layer
+  text_hours_left_layer = text_layer_create(GRect(0, 40, 144-0, 168-40));
+  text_layer_set_text_alignment(text_hours_left_layer, GTextAlignmentLeft);
+  text_layer_set_text_color(text_hours_left_layer, GColorWhite);
+  text_layer_set_background_color(text_hours_left_layer, GColorClear);
+  text_layer_set_font(text_hours_left_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
+  layer_add_child(window_layer, text_layer_get_layer(text_hours_left_layer));
+
+  // hours left text layer
+  text_days_left_layer = text_layer_create(GRect(0, 60, 144-0, 168-60));
+  text_layer_set_text_alignment(text_days_left_layer, GTextAlignmentLeft);
+  text_layer_set_text_color(text_days_left_layer, GColorWhite);
+  text_layer_set_background_color(text_days_left_layer, GColorClear);
+  text_layer_set_font(text_days_left_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
+  layer_add_child(window_layer, text_layer_get_layer(text_days_left_layer));
+
 
   // Day text layer
-  text_day_layer = text_layer_create(GRect(0, 69, 144, 168-68));
-  text_layer_set_text_alignment(text_day_layer, GTextAlignmentCenter);
+  text_day_layer = text_layer_create(GRect(0, 81, 144, 168-81));
+  text_layer_set_text_alignment(text_day_layer, GTextAlignmentRight);
   text_layer_set_text_color(text_day_layer, GColorWhite);
   text_layer_set_background_color(text_day_layer, GColorClear);
-  text_layer_set_font(text_day_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_SMALL_21)));
+  text_layer_set_font(text_day_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_LEANDER_SMALL_21)));
   layer_add_child(window_layer, text_layer_get_layer(text_day_layer));
 
   // Time text layer
-  text_time_layer = text_layer_create(GRect(7, 89, 144-7, 168-89));
+  text_time_layer = text_layer_create(GRect(7, 99, 144-7, 168-99));
   text_layer_set_text_alignment(text_time_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_time_layer, GColorWhite);
   text_layer_set_background_color(text_time_layer, GColorClear);
-  text_layer_set_font(text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_BIG_46)));
+  text_layer_set_font(text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COZUMIX_BIG_52)));
   layer_add_child(window_layer, text_layer_get_layer(text_time_layer));
 /*  
   //BT connection status layer
@@ -128,7 +196,7 @@ void handle_init(void) {
   bitmap_layer_set_bitmap(bt_layer, bt_bitmap);
 */
   // Horisontal dividing line
-  GRect line_frame = GRect(8, 100, 139, 2);
+  GRect line_frame = GRect(1, 106, 139, 2);
   line_layer = layer_create(line_frame);
   layer_set_update_proc(line_layer, line_layer_update_callback);
   layer_add_child(window_layer, line_layer);
