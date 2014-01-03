@@ -1,0 +1,29 @@
+{
+    "versionLabel": "1.0",
+    "uuid": "4ce4a7b7-d35d-4201-80a9-92b195c2bc0c",
+    "appKeys": {},
+    "longName": "symplicity2",
+    "versionCode": 1,
+    "capabilities": [
+        ""
+    ],
+    "shortName": "symplicity2",
+    "companyName": "spooter",
+    "watchapp": {
+        "watchface": true
+    },
+    "resources": {
+        "media": [
+            {
+                "type": "font",
+                "name": "RESOURCE_ID_FONT_ROBOTO_CONDENSED_21",
+                "file": "fonts/Roboto-Condensed.ttf"
+            },
+            {
+                "type": "font",
+                "name": "RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49",
+                "file": "fonts/Roboto-Bold.ttf"
+            }
+        ]
+    }
+}
