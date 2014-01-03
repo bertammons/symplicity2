@@ -16,13 +16,18 @@
         "media": [
             {
                 "type": "font",
-                "name": "RESOURCE_ID_FONT_ROBOTO_CONDENSED_21",
-                "file": "fonts/Roboto-Condensed.ttf"
+                "name": "FONT_FADED_TYPEWRITER_BIG_46",
+                "file": "fonts/Leander.ttf"
             },
             {
                 "type": "font",
                 "name": "RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49",
                 "file": "fonts/Roboto-Bold.ttf"
+            },
+            {
+                "type": "font",
+                "name": "RESOURCE_ID_FONT_ROBOTO_CONDENSED_21",
+                "file": "fonts/Roboto-Condensed.ttf"
             }
         ]
     }
