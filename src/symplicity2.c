@@ -30,6 +30,7 @@ void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   text_layer_set_text(text_date_layer, date_text);
 
   // Day Text
+  strftime(day_text, sizeof(day_text), "%A", tick_time);
   text_layer_set_text(text_day_layer, day_text);
 
   // Time Text
