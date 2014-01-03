@@ -7,6 +7,7 @@ Window *window;
 TextLayer *text_date_layer;
 TextLayer *text_day_layer;
 TextLayer *text_time_layer;
+TextLayer *text_unix_layer;
 Layer *line_layer;
 
 void line_layer_update_callback(Layer *layer, GContext* ctx) {
@@ -16,13 +17,16 @@ void line_layer_update_callback(Layer *layer, GContext* ctx) {
 
 void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   // Need to be static because they're used by the system later.
+  static char unix_text[] = "Xxxxxxxxx";
   static char date_text[] = "Xxxxxxxxx 00";  
   static char day_text[] = "Xxxxxxxxx";
   static char time_text[] = "00:00";  
-  
+
   //Unix Time
-  //sprintf(unix_time, "%u", (unsigned) time(NULL));
-  
+  time_t unix_time = time(NULL);
+  snprintf(unix_text, sizeof(unix_text), "%d", (int)unix_time);
+  text_layer_set_text(text_unix_layer, unix_text);
+
   char *time_format;
 
   // Date Text
@@ -62,18 +66,28 @@ void handle_init(void) {
 
   Layer *window_layer = window_get_root_layer(window);
 
+  // Day text layer
+  text_unix_layer = text_layer_create(GRect(8, 2, 144-8, 168-68));
+  text_layer_set_text_color(text_unix_layer, GColorWhite);
+  text_layer_set_background_color(text_unix_layer, GColorClear);
+  text_layer_set_font(text_unix_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  layer_add_child(window_layer, text_layer_get_layer(text_unix_layer));
+
+  //Date Text Layer
   text_date_layer = text_layer_create(GRect(8, 68, 144-8, 168-68));
   text_layer_set_text_color(text_date_layer, GColorWhite);
   text_layer_set_background_color(text_date_layer, GColorClear);
   text_layer_set_font(text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(text_date_layer));
 
+  // Day text layer
   text_day_layer = text_layer_create(GRect(8, 30, 144-8, 168-68));
   text_layer_set_text_color(text_day_layer, GColorWhite);
   text_layer_set_background_color(text_day_layer, GColorClear);
   text_layer_set_font(text_day_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(text_day_layer));
 
+  // Time text layer
   text_time_layer = text_layer_create(GRect(7, 92, 144-7, 168-92));
   text_layer_set_text_color(text_time_layer, GColorWhite);
   text_layer_set_background_color(text_time_layer, GColorClear);
