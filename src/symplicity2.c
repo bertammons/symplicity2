@@ -23,11 +23,9 @@ void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   static char time_text[] = "00:00";  
 
   //Unix Time
-  time_t unix_time = time(NULL);
-  snprintf(unix_text, sizeof(unix_text), "%d", (int)unix_time);
+  int unix_time = time(NULL);
+  snprintf(unix_text, sizeof(unix_text), "%d", unix_time); //convert int to string
   text_layer_set_text(text_unix_layer, unix_text);
-
-  char *time_format;
 
   // Date Text
   strftime(date_text, sizeof(date_text), "%B %e", tick_time);
@@ -38,6 +36,8 @@ void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
   text_layer_set_text(text_day_layer, day_text);
 
   // Time Text
+  char *time_format;
+
   if (clock_is_24h_style()) {
     time_format = "%R";
   } else {
@@ -66,22 +66,25 @@ void handle_init(void) {
 
   Layer *window_layer = window_get_root_layer(window);
 
-  // Day text layer
+  // Unix text layer
   text_unix_layer = text_layer_create(GRect(8, 2, 144-8, 168-68));
+  text_layer_set_text_alignment(text_unix_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_unix_layer, GColorWhite);
   text_layer_set_background_color(text_unix_layer, GColorClear);
-  text_layer_set_font(text_unix_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_font(text_unix_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_SMALL_21)));
   layer_add_child(window_layer, text_layer_get_layer(text_unix_layer));
 
   //Date Text Layer
-  text_date_layer = text_layer_create(GRect(8, 68, 144-8, 168-68));
+  text_date_layer = text_layer_create(GRect(8, 140, 144-8, 168-68));
+  text_layer_set_text_alignment(text_date_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_date_layer, GColorWhite);
   text_layer_set_background_color(text_date_layer, GColorClear);
   text_layer_set_font(text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(text_date_layer));
 
   // Day text layer
-  text_day_layer = text_layer_create(GRect(8, 30, 144-8, 168-68));
+  text_day_layer = text_layer_create(GRect(8, 69, 144-8, 168-68));
+  text_layer_set_text_alignment(text_day_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_day_layer, GColorWhite);
   text_layer_set_background_color(text_day_layer, GColorClear);
   text_layer_set_font(text_day_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
@@ -89,12 +92,13 @@ void handle_init(void) {
 
   // Time text layer
   text_time_layer = text_layer_create(GRect(7, 92, 144-7, 168-92));
+  text_layer_set_text_alignment(text_time_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_time_layer, GColorWhite);
   text_layer_set_background_color(text_time_layer, GColorClear);
   text_layer_set_font(text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FADED_TYPEWRITER_BIG_46)));
   layer_add_child(window_layer, text_layer_get_layer(text_time_layer));
 
-  GRect line_frame = GRect(8, 97, 139, 2);
+  GRect line_frame = GRect(8, 100, 139, 2);
   line_layer = layer_create(line_frame);
   layer_set_update_proc(line_layer, line_layer_update_callback);
   layer_add_child(window_layer, line_layer);

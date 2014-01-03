@@ -16,6 +16,11 @@
         "media": [
             {
                 "type": "font",
+                "name": "FONT_FADED_TYPEWRITER_SMALL_21",
+                "file": "fonts/Leander.ttf"
+            },
+            {
+                "type": "font",
                 "name": "FONT_FADED_TYPEWRITER_BIG_46",
                 "file": "fonts/Leander.ttf"
             },
